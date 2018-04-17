@@ -18,4 +18,4 @@ if [[ ! -e /data/$(hostname) ]]; then
   echo "Redis data dir doesn't exist, data won't be persistent!"
   mkdir /data/$(hostname)
 fi
-redis-server /redis-master/redis.conf --protected-mode no
+redis-server /usr/local/etc/redis/redis.conf --protected-mode no
