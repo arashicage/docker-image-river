@@ -19,6 +19,7 @@ VOLUME /scripts
 
 COPY start.sh /scripts/start.sh
 
-RUN chmod 755 /scripts/start.sh
+# RUN chmod 755 /scripts/start.sh
+RUN chmod a+x /scripts/start.sh
 
 CMD ["/scripts/start.sh"]
