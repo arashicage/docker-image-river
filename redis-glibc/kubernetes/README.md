@@ -1,0 +1,1 @@
+ref: https://github.com/kubernetes/examples/tree/master/staging/storage/redis
