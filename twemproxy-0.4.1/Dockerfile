@@ -17,6 +17,10 @@ RUN cd /root && wget https://github.com/twitter/twemproxy/archive/${VERSION}.tar
 
 VOLUME /scripts
 
-COPY start.sh /scripts/start.sh && chmod 755 /scripts/start.sh
+# COPY start.sh /scripts/start.sh
+# RUN chmod 755 /scripts/start.sh
+
+ADD start.sh /scripts/
+RUN chmod 755 /scripts/start.sh
 
 CMD ["/scripts/start.sh"]
