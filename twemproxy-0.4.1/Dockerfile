@@ -1,30 +1,24 @@
 # ref https://hub.docker.com/r/zapier/twemproxy/~/dockerfile/
-FROM ubuntu:14.04
+# ref https://hub.docker.com/r/jgoodall/twemproxy/~/dockerfile/
+# ref https://hub.docker.com/r/fblgit/twemproxy-nutcracker/~/dockerfile/
 
-RUN apt-get update
-# RUN apt-get install libtool make automake supervisor curl python2.7 python-pip -qy
-RUN apt-get install libtool make automake supervisor curl -qy
-# RUN apt-get install libyaml-0-2 -yq
-# RUN apt-get install -y memcached
+FROM ubuntu:16.04
 
-# Install twemproxy
-RUN curl -qL https://github.com/twitter/twemproxy/archive/v0.4.1.tar.gz | tar xzf -
-RUN cd twemproxy-0.4.1 && ./configure --enable-debug=log && make && mv src/nutcracker /usr/local/bin/nutcracker
-RUN cd / && rm -rf twemproxy-0.4.1
+MAINTAINER arashicage@yeah.net
 
-# install pip deps
-# RUN pip install pyaml==14.05.7
-# RUN pip install boto==2.32.0
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Configuration
-RUN mkdir -p /etc/nutcracker
-RUN mkdir -p /var/log/nutcracker
-# ADD generate_configs.py /generate_configs.py
-ADD run.sh /run.sh
-RUN chmod a+x run.sh
+ENV VERSION=v0.4.1
 
-# EXPOSE 3000 22222 22123 11211 22121
-EXPOSE 22121 22222
-CMD ["/run.sh"]
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get install -qy gcc autoconf make libtool binutils wget
 
-RUN apt-get remove libtool make automake curl -yq
+RUN cd /root && wget https://github.com/twitter/twemproxy/archive/${VERSION}.tar.gz && tar zxf ${VERSION}.tar.gz && cd twemproxy-* && \
+    autoreconf -fvi && ./configure --prefix=/usr && make -j4 && make install
+
+VOLUME /scripts
+
+COPY start.sh /scripts/start.sh
+
+RUN chmod 755 /scripts/start.sh
+
+CMD ["/scripts/start.sh"]
