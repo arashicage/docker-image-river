@@ -15,8 +15,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get install -qy gcc 
 RUN cd /root && wget https://github.com/twitter/twemproxy/archive/${VERSION}.tar.gz && tar zxf ${VERSION}.tar.gz && cd twemproxy-* && \
     autoreconf -fvi && ./configure --prefix=/usr && make -j4 && make install
 
-VOLUME /scripts
+ADD start.sh /start.sh
+RUN chmod 755 /start.sh
 
-COPY start.sh /scripts/start.sh && chmod 755 /scripts/start.sh
-
-CMD ["/scripts/start.sh"]
+CMD ["/start.sh"]
